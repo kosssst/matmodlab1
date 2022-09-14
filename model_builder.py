@@ -54,6 +54,7 @@ def kramer(arr, n):
 
 def linear_model(x_arr, y_arr, n, plot):
     yt = []
+    yt1 = []
     sum_x = 0.0
     sum_y = 0.0
     sum_x2 = 0.0
@@ -81,7 +82,7 @@ def linear_model(x_arr, y_arr, n, plot):
     print("koef kor = " + str(koef_kor))
     r2_yt = 0
     r2_y = 0
-    x_arr = sorted(x_arr)
+    
     for i in range(n):
         yti = koefs[0] + x_arr[i]*koefs[1]
         r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
@@ -89,13 +90,17 @@ def linear_model(x_arr, y_arr, n, plot):
         yt.append(yti)
     r2 = 1 - (r2_yt/r2_y)
     print("r^2 = " + str(r2))
-    plot.plot(x_arr, yt, label = "linear", color="red")
+    x_arr = sorted(x_arr)
+    for i in range(n):
+        yt1.append(koefs[0] + x_arr[i]*koefs[1])
+    plot.plot(x_arr, yt1, label = "linear", color="red")
 
     
 
 
 
 def polinomial_model_2(x_arr, y_arr, n, plot):
+    yt = []
     yt2 = []
     sum_x = 0.0
     sum_y = 0.0
@@ -131,19 +136,23 @@ def polinomial_model_2(x_arr, y_arr, n, plot):
     print("koef kor = " + str(koef_kor))
     r2_yt = 0
     r2_y = 0
-    x_arr = sorted(x_arr)
+    
     for i in range(n):
         yti = koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i]
         r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
         r2_y = r2_y + ((y[i]-y_ser)*(y[i]-y_ser))
-        yt2.append(yti)
+        yt.append(yti)
     r2 = 1 - (r2_yt/r2_y)
     print("r^2 = " + str(r2))
+    x_arr = sorted(x_arr)
+    for i in range(n):
+        yt2.append(koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i])
     plot.plot(x_arr, yt2, label = "polinomial (2)", color="blue")
 
 
 def polinomial_model_3(x_arr, y_arr, n, plot):
     yt3 = []
+    yt = []
     sum_x = 0.0
     sum_y = 0.0
     sum_x2 = 0.0
@@ -185,14 +194,16 @@ def polinomial_model_3(x_arr, y_arr, n, plot):
     print("koef kor = " + str(koef_kor))
     r2_yt = 0
     r2_y = 0
-    x_arr = sorted(x_arr)
     for i in range(n):
         yti = koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i] + koefs[3]*(math.pow(x_arr[i], 3))
         r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
         r2_y = r2_y + ((y[i]-y_ser)*(y[i]-y_ser))
-        yt3.append(yti)
+        yt.append(yti)
     r2 = 1 - (r2_yt/r2_y)
     print("r^2 = " + str(r2))
+    x_arr = sorted(x_arr)
+    for i in range(n):
+        yt3.append(koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i] + koefs[3]*(math.pow(x_arr[i], 3)))
     plot.plot(x_arr, yt3, label = "polinomial (3)", color="yellow")
 
 if __name__ == "__main__":

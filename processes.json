@@ -10,5 +10,17 @@
         "data": "data/pm1-pm10.csv",
         "x-label": "PM1",
         "y-label": "PM10"
+    },
+    {
+        "name": "PM2.5-PM10",
+        "data": "data/pm25-pm10.csv",
+        "x-label": "PM2.5",
+        "y-label": "PM10"
+    },
+    {
+        "name": "PM1-Temperature",
+        "data": "data/pm1-temperature.csv",
+        "x-label": "PM1",
+        "y-label": "Temperature"
     }
 ]

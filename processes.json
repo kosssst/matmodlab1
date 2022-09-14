@@ -1,0 +1,14 @@
+[
+    {
+        "name": "PM1-PM2.5",
+        "data": "data/pm1-pm25.csv",
+        "x-label": "PM1",
+        "y-label": "PM2.5"
+    },
+    {
+        "name": "PM1-PM10",
+        "data": "data/pm1-pm10.csv",
+        "x-label": "PM1",
+        "y-label": "PM10"
+    }
+]

@@ -95,10 +95,6 @@ def linear_model(x_arr, y_arr, n, plot):
         yt1.append(koefs[0] + x_arr[i]*koefs[1])
     plot.plot(x_arr, yt1, label = "linear", color="red")
 
-    
-
-
-
 def polinomial_model_2(x_arr, y_arr, n, plot):
     yt = []
     yt2 = []
@@ -147,7 +143,6 @@ def polinomial_model_2(x_arr, y_arr, n, plot):
     for i in range(n):
         yt2.append(koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i])
     plot.plot(x_arr, yt2, label = "polinomial (n=2)", color="blue")
-
 
 def polinomial_model_3(x_arr, y_arr, n, plot):
     yt3 = []
@@ -205,6 +200,52 @@ def polinomial_model_3(x_arr, y_arr, n, plot):
         yt3.append(koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i] + koefs[3]*(math.pow(x_arr[i], 3)))
     plot.plot(x_arr, yt3, label = "polinomial (n=3)", color="yellow")
 
+def log_model(x_arr, y_arr, n, plot):
+    yt = []
+    ytl = []
+    sum_x = 0.0
+    sum_y = 0.0
+    sum_ln_x = 0.0
+    sum_ln2_x = 0.0
+    sum_yln_x = 0.0
+    for i in range(n):
+        sum_x = sum_x + x_arr[i]
+        sum_y = sum_y + y_arr[i]
+        sum_ln_x = sum_ln_x + math.log(x_arr[i])
+        sum_ln2_x = sum_ln2_x + math.pow(math.log(x_arr[i]), 2)
+        sum_yln_x = sum_yln_x + (y_arr[i]*math.log(x_arr[i]))
+    x_ser = sum_x/n
+    y_ser = sum_y/n
+    p_xy_sum = 0.0
+    p_x_sum = 0.0
+    p_y_sum = 0.0
+    for i in range(n):
+        p_xy_sum = p_xy_sum + ((x_arr[i] - x_ser)*(y_arr[i] - y_ser))
+        p_x_sum = p_x_sum + ((x_arr[i] - x_ser)*(x_arr[i] - x_ser))
+        p_y_sum = p_y_sum + ((y_arr[i] - y_ser)*(y_arr[i] - y_ser))
+    arr = [[n, sum_ln_x, sum_y], [sum_ln_x, sum_ln2_x, sum_yln_x]]
+    koefs = kramer(arr, 2)
+    print(" => log:")
+    print("  a1 = " + str(koefs[0]))
+    print("  a2 = " + str(koefs[1]))
+    koef_kor = p_xy_sum/((math.sqrt(p_x_sum))*(math.sqrt(p_y_sum)))
+    print("  koef kor = " + str(koef_kor))
+    r2_yt = 0
+    r2_y = 0
+    
+    for i in range(n):
+        yti = koefs[0] + math.log(x_arr[i])*koefs[1]
+        r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
+        r2_y = r2_y + ((y[i]-y_ser)*(y[i]-y_ser))
+        yt.append(yti)
+    r2 = 1 - (r2_yt/r2_y)
+    print("  r^2 = " + str(r2) + "\n")
+    x_arr = sorted(x_arr)
+    for i in range(n):
+        ytl.append(koefs[0] + math.log(x_arr[i])*koefs[1])
+    plot.plot(x_arr, ytl, label = "log", color="brown")
+
+
 if __name__ == "__main__":
     x = []
     y = []
@@ -224,8 +265,9 @@ if __name__ == "__main__":
         plt.scatter(x, y, color= "green", marker= ".", s=1)
         print("-----" + str(name) + "-----")
         linear_model(x, y, num_rows, plt)
-        polinomial_model_2(x,y,num_rows,plt)
-        polinomial_model_3(x,y,num_rows,plt)
+        polinomial_model_2(x, y, num_rows, plt)
+        polinomial_model_3(x, y, num_rows, plt)
+        log_model(x, y, num_rows, plt)
         plt.xlabel(xl)
         plt.ylabel(yl)
         plt.title(name)

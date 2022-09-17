@@ -245,6 +245,50 @@ def log_model(x_arr, y_arr, n, plot):
         ytl.append(koefs[0] + math.log(x_arr[i])*koefs[1])
     plot.plot(x_arr, ytl, label = "log", color="brown")
 
+def exp_model(x_arr, y_arr, n, plot):
+    yt = []
+    yte = []
+    sum_x = 0.0
+    sum_y = 0.0
+    sum_e_x = 0.0
+    sum_e_2x = 0.0
+    sum_ye_x = 0.0
+    for i in range(n):
+        sum_x = sum_x + x_arr[i]
+        sum_y = sum_y + y_arr[i]
+        sum_e_x = sum_e_x + math.exp(x_arr[i])
+        sum_e_2x = sum_e_2x + math.exp(x_arr[i]*2)
+        sum_ye_x = sum_ye_x + (y_arr[i]*math.exp(x_arr[i]))
+    x_ser = sum_x/n
+    y_ser = sum_y/n
+    p_xy_sum = 0.0
+    p_x_sum = 0.0
+    p_y_sum = 0.0
+    for i in range(n):
+        p_xy_sum = p_xy_sum + ((x_arr[i] - x_ser)*(y_arr[i] - y_ser))
+        p_x_sum = p_x_sum + ((x_arr[i] - x_ser)*(x_arr[i] - x_ser))
+        p_y_sum = p_y_sum + ((y_arr[i] - y_ser)*(y_arr[i] - y_ser))
+    arr = [[n, sum_e_x, sum_y], [sum_e_x, sum_e_2x, sum_ye_x]]
+    koefs = kramer(arr, 2)
+    print(" => exp:")
+    print("  a1 = " + str(koefs[0]))
+    print("  a2 = " + str(koefs[1]))
+    koef_kor = p_xy_sum/((math.sqrt(p_x_sum))*(math.sqrt(p_y_sum)))
+    print("  koef kor = " + str(koef_kor))
+    r2_yt = 0
+    r2_y = 0
+    
+    for i in range(n):
+        yti = koefs[0] + math.exp(x_arr[i])*koefs[1]
+        r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
+        r2_y = r2_y + ((y[i]-y_ser)*(y[i]-y_ser))
+        yt.append(yti)
+    r2 = 1 - (r2_yt/r2_y)
+    print("  r^2 = " + str(r2) + "\n")
+    x_arr = sorted(x_arr)
+    for i in range(n):
+        yte.append(koefs[0] + math.exp(x_arr[i])*koefs[1])
+    plot.plot(x_arr, yte, label = "exp", color="lime")
 
 if __name__ == "__main__":
     x = []
@@ -268,6 +312,7 @@ if __name__ == "__main__":
         polinomial_model_2(x, y, num_rows, plt)
         polinomial_model_3(x, y, num_rows, plt)
         log_model(x, y, num_rows, plt)
+        exp_model(x, y, num_rows, plt)
         plt.xlabel(xl)
         plt.ylabel(yl)
         plt.title(name)

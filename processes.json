@@ -46,5 +46,17 @@
         "data": "data/no2_ug-co_mg.csv",
         "x-label": "NO2ug",
         "y-label": "COmg"
+    },
+    {
+        "name": "Time-PM1",
+        "data": "data/time-pm1.csv",
+        "x-label": "Time",
+        "y-label": "PM1"
+    },
+    {
+        "name": "Time-Temperature",
+        "data": "data/time-temperature.csv",
+        "x-label": "Time",
+        "y-label": "Temperature"
     }
 ]

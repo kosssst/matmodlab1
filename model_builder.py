@@ -53,76 +53,118 @@ def kramer(arr, n):
     return koefs
 
 def linear_model(x_arr, y_arr, n, plot):
+    x_build = []
+    y_build = []
+    x_test = []
+    y_test = []
+    n_build = 0
+    n_test = 0
+    for i in range(n):
+        if i % 5 == 0:
+            x_test.append(x_arr[i])
+            y_test.append(y_arr[i])
+            n_test = n_test + 1
+        else:
+            x_build.append(x_arr[i])
+            y_build.append(y_arr[i])
+            n_build = n_build + 1
     yt = []
     yt1 = []
-    sum_x = 0.0
-    sum_y = 0.0
-    sum_x2 = 0.0
-    sum_xy = 0.0
-    for i in range(n):
-        sum_x = sum_x + x_arr[i]
-        sum_y = sum_y + y_arr[i]
-        sum_x2 = sum_x2 + (x_arr[i]*x_arr[i])
-        sum_xy = sum_xy + (x_arr[i]*y_arr[i])
-    x_ser = sum_x/n
-    y_ser = sum_y/n
+    sum_x_build = 0.0
+    sum_y_build = 0.0
+    sum_x2_build = 0.0
+    sum_xy_build = 0.0
+    for i in range(n_build):
+        sum_x_build = sum_x_build + x_build[i]
+        sum_y_build = sum_y_build + y_build[i]
+        sum_x2_build = sum_x2_build + math.pow(x_build[i], 2)
+        sum_xy_build = sum_xy_build + (x_build[i]*y_build[i])
+    x_ser_build = sum_x_build/n_build
+    y_ser_build = sum_y_build/n_build
     p_xy_sum = 0.0
     p_x_sum = 0.0
     p_y_sum = 0.0
-    for i in range(n):
-        p_xy_sum = p_xy_sum + ((x_arr[i] - x_ser)*(y_arr[i] - y_ser))
-        p_x_sum = p_x_sum + ((x_arr[i] - x_ser)*(x_arr[i] - x_ser))
-        p_y_sum = p_y_sum + ((y_arr[i] - y_ser)*(y_arr[i] - y_ser))
-    arr = [[n, sum_x, sum_y], [sum_x, sum_x2, sum_xy]]
+    for i in range(n_build):
+        p_xy_sum = p_xy_sum + ((x_build[i] - x_ser_build)*(y_build[i] - y_ser_build))
+        p_x_sum = p_x_sum + ((x_build[i] - x_ser_build)*(x_build[i] - x_ser_build))
+        p_y_sum = p_y_sum + ((y_build[i] - y_ser_build)*(y_build[i] - y_ser_build))
+    arr = [[n_build, sum_x_build, sum_y_build], [sum_x_build, sum_x2_build, sum_xy_build]]
     koefs = kramer(arr, 2)
     print(" => linear:")
     print("  a1 = " + str(koefs[0]))
     print("  a2 = " + str(koefs[1]))
     koef_kor = p_xy_sum/((math.sqrt(p_x_sum))*(math.sqrt(p_y_sum)))
     print("  koef kor = " + str(koef_kor))
-    r2_yt = 0
-    r2_y = 0
+    r2_yt_build = 0
+    r2_y_build = 0
     
-    for i in range(n):
-        yti = koefs[0] + x_arr[i]*koefs[1]
-        r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
-        r2_y = r2_y + ((y[i]-y_ser)*(y[i]-y_ser))
+    for i in range(n_build):
+        yti = koefs[0] + x_build[i] * koefs[1]
+        r2_yt_build = r2_yt_build + math.pow(y_build[i] - yti, 2)
+        r2_y_build = r2_y_build + math.pow(y_build[i] - y_ser_build, 2)
         yt.append(yti)
-    r2 = 1 - (r2_yt/r2_y)
-    print("  r^2 = " + str(r2) + "\n")
-    x_arr = sorted(x_arr)
-    for i in range(n):
-        yt1.append(koefs[0] + x_arr[i]*koefs[1])
-    plot.plot(x_arr, yt1, label = "linear", color="red")
+    r2 = 1 - (r2_yt_build/r2_y_build)
+    print("  r^2 = " + str(r2))
+    r2_yt_test = 0
+    r2_y_test = 0
+    sum_y_test = 0
+    for i in range(n_test):
+        sum_y_test = sum_y_test + y_test[i]
+    y_ser_test = sum_y_test / n_test
+    for i in range(n_test):
+        yti = koefs[0] + x_test[i] * koefs[1]
+        r2_yt_test = r2_yt_test + math.pow(y_test[i] - yti, 2)
+        r2_y_test = r2_y_test + math.pow(y_test[i] - y_ser_test, 2)
+    r2_test = 1 - (r2_yt_test/r2_y_test)
+    print("  r^2 (test) = " + str(r2_test) + "\n")
+    x_build = sorted(x_build)
+    for i in range(n_build):
+        yt1.append(koefs[0] + x_build[i] * koefs[1])
+    plot.plot(x_build, yt1, label = "linear", color="red")
 
 def polinomial_model_2(x_arr, y_arr, n, plot):
+    x_build = []
+    y_build = []
+    x_test = []
+    y_test = []
+    n_build = 0
+    n_test = 0
+    for i in range(n):
+        if i % 5 == 0:
+            x_test.append(x_arr[i])
+            y_test.append(y_arr[i])
+            n_test = n_test + 1
+        else:
+            x_build.append(x_arr[i])
+            y_build.append(y_arr[i])
+            n_build = n_build + 1
     yt = []
     yt2 = []
-    sum_x = 0.0
-    sum_y = 0.0
-    sum_x2 = 0.0
-    sum_xy = 0.0
-    sum_x3 = 0.0
-    sum_x2y = 0.0
-    sum_x4 = 0.0
-    for i in range(n):
-        sum_x = sum_x + x_arr[i]
-        sum_y = sum_y + y_arr[i]
-        sum_x2 = sum_x2 + (x_arr[i]*x_arr[i])
-        sum_xy = sum_xy + (x_arr[i]*y_arr[i])
-        sum_x3 = sum_x3 + (x_arr[i]*x_arr[i]*x_arr[i])
-        sum_x2y = sum_x2y + (x_arr[i]*x_arr[i]*y_arr[i])
-        sum_x4 = sum_x4 + (math.pow(x_arr[i], 4))
-    x_ser = sum_x/n
-    y_ser = sum_y/n
+    sum_x_build = 0.0
+    sum_y_build = 0.0
+    sum_x2_build = 0.0
+    sum_xy_build = 0.0
+    sum_x3_build = 0.0
+    sum_x2y_build = 0.0
+    sum_x4_build = 0.0
+    for i in range(n_build):
+        sum_x_build = sum_x_build + x_build[i]
+        sum_y_build = sum_y_build + y_build[i]
+        sum_x2_build = sum_x2_build + math.pow(x_build[i], 2)
+        sum_xy_build = sum_xy_build + (x_build[i] * y_build[i])
+        sum_x3_build = sum_x3_build + math.pow(x_build[i], 3)
+        sum_x2y_build = sum_x2y_build + (math.pow(x_build[i], 2) * y_build[i])
+        sum_x4_build = sum_x4_build + math.pow(x_build[i], 4)
+    x_ser_build = sum_x_build/n_build
+    y_ser_build = sum_y_build/n_build
     p_xy_sum = 0.0
     p_x_sum = 0.0
     p_y_sum = 0.0
-    for i in range(n):
-        p_xy_sum = p_xy_sum + ((x_arr[i] - x_ser)*(y_arr[i] - y_ser))
-        p_x_sum = p_x_sum + ((x_arr[i] - x_ser)*(x_arr[i] - x_ser))
-        p_y_sum = p_y_sum + ((y_arr[i] - y_ser)*(y_arr[i] - y_ser))
-    arr = [[n, sum_x, sum_x2, sum_y], [sum_x, sum_x2, sum_x3, sum_xy], [sum_x2, sum_x3, sum_x4, sum_x2y]]
+    for i in range(n_build):
+        p_xy_sum = p_xy_sum + ((x_build[i] - x_ser_build)*(y_build[i] - y_ser_build))
+        p_x_sum = p_x_sum + ((x_build[i] - x_ser_build)*(x_build[i] - x_ser_build))
+        p_y_sum = p_y_sum + ((y_build[i] - y_ser_build)*(y_build[i] - y_ser_build))
+    arr = [[n_build, sum_x_build, sum_x2_build, sum_y_build], [sum_x_build, sum_x2_build, sum_x3_build, sum_xy_build], [sum_x2_build, sum_x3_build, sum_x4_build, sum_x2y_build]]
     koefs = kramer(arr, 3)
     print(" => polinomial (n=2):")
     print("  a1 = " + str(koefs[0]))
@@ -132,52 +174,79 @@ def polinomial_model_2(x_arr, y_arr, n, plot):
     print("  koef kor = " + str(koef_kor))
     r2_yt = 0
     r2_y = 0
-    for i in range(n):
-        yti = koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i]
-        r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
-        r2_y = r2_y + ((y[i]-y_ser)*(y[i]-y_ser))
+    for i in range(n_build):
+        yti = koefs[0] + x_build[i] * koefs[1] + koefs[2] * math.pow(x_build[i], 2)
+        r2_yt = r2_yt + math.pow(y_build[i] - yti, 2)
+        r2_y = r2_y + math.pow(y_build[i] - y_ser_build, 2)
         yt.append(yti)
     r2 = 1 - (r2_yt/r2_y)
-    print("  r^2 = " + str(r2) + "\n")
-    x_arr = sorted(x_arr)
-    for i in range(n):
-        yt2.append(koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i])
-    plot.plot(x_arr, yt2, label = "polinomial (n=2)", color="blue")
+    print("  r^2 = " + str(r2))
+    r2_yt_test = 0
+    r2_y_test = 0
+    sum_y_test = 0
+    for i in range(n_test):
+        sum_y_test = sum_y_test + y_test[i]
+    y_ser_test = sum_y_test / n_test
+    for i in range(n_test):
+        yti = koefs[0] + x_test[i] * koefs[1] + koefs[2] * math.pow(x_test[i], 2)
+        r2_yt_test = r2_yt_test + math.pow(y_test[i] - yti, 2)
+        r2_y_test = r2_y_test + math.pow(y_test[i] - y_ser_test, 2)
+    r2_test = 1 - (r2_yt_test/r2_y_test)
+    print("  r^2 (test) = " + str(r2_test) + "\n")
+    x_build = sorted(x_build)
+    for i in range(n_build):
+        yt2.append(koefs[0] + x_build[i] * koefs[1] + koefs[2] * math.pow(x_build[i], 2))
+    plot.plot(x_build, yt2, label = "polinomial (n=2)", color="blue")
 
 def polinomial_model_3(x_arr, y_arr, n, plot):
+    x_build = []
+    y_build = []
+    x_test = []
+    y_test = []
+    n_build = 0
+    n_test = 0
+    for i in range(n):
+        if i % 5 == 0:
+            x_test.append(x_arr[i])
+            y_test.append(y_arr[i])
+            n_test = n_test + 1
+        else:
+            x_build.append(x_arr[i])
+            y_build.append(y_arr[i])
+            n_build = n_build + 1
     yt3 = []
     yt = []
-    sum_x = 0.0
-    sum_y = 0.0
-    sum_x2 = 0.0
-    sum_xy = 0.0
-    sum_x3 = 0.0
-    sum_x2y = 0.0
-    sum_x4 = 0.0
-    sum_x5 = 0.0
-    sum_x3y = 0.0
-    sum_x6 = 0.0
-    for i in range(n):
-        sum_x = sum_x + x_arr[i]
-        sum_y = sum_y + y_arr[i]
-        sum_x2 = sum_x2 + (x_arr[i]*x_arr[i])
-        sum_xy = sum_xy + (x_arr[i]*y_arr[i])
-        sum_x3 = sum_x3 + (x_arr[i]*x_arr[i]*x_arr[i])
-        sum_x2y = sum_x2y + (x_arr[i]*x_arr[i]*y_arr[i])
-        sum_x4 = sum_x4 + (math.pow(x_arr[i], 4))
-        sum_x5 = sum_x5 + (math.pow(x_arr[i], 5))
-        sum_x3y = sum_x3y + (math.pow(x_arr[i], 3)*y_arr[i])
-        sum_x6 = sum_x6 + (math.pow(x_arr[i], 6))
-    x_ser = sum_x/n
-    y_ser = sum_y/n
+    sum_x_build = 0.0
+    sum_y_build = 0.0
+    sum_x2_build = 0.0
+    sum_xy_build = 0.0
+    sum_x3_build = 0.0
+    sum_x2y_build = 0.0
+    sum_x4_build = 0.0
+    sum_x5_build = 0.0
+    sum_x3y_build = 0.0
+    sum_x6_build = 0.0
+    for i in range(n_build):
+        sum_x_build = sum_x_build + x_build[i]
+        sum_y_build = sum_y_build + y_build[i]
+        sum_x2_build = sum_x2_build + math.pow(x_build[i], 2)
+        sum_xy_build = sum_xy_build + (x_build[i] * y_build[i])
+        sum_x3_build = sum_x3_build + math.pow(x_build[i], 3)
+        sum_x2y_build = sum_x2y_build + (math.pow(x_build[i], 2) * y_build[i])
+        sum_x4_build = sum_x4_build + math.pow(x_build[i], 4)
+        sum_x5_build = sum_x5_build + (math.pow(x_build[i], 5))
+        sum_x3y_build = sum_x3y_build + (math.pow(x_build[i], 3) * y_build[i])
+        sum_x6_build = sum_x6_build + (math.pow(x_build[i], 6))
+    x_ser_build = sum_x_build/n_build
+    y_ser_build = sum_y_build/n_build
     p_xy_sum = 0.0
     p_x_sum = 0.0
     p_y_sum = 0.0
-    for i in range(n):
-        p_xy_sum = p_xy_sum + ((x_arr[i] - x_ser)*(y_arr[i] - y_ser))
-        p_x_sum = p_x_sum + ((x_arr[i] - x_ser)*(x_arr[i] - x_ser))
-        p_y_sum = p_y_sum + ((y_arr[i] - y_ser)*(y_arr[i] - y_ser))
-    arr = [[n, sum_x, sum_x2, sum_x3, sum_y], [sum_x, sum_x2, sum_x3, sum_x4, sum_xy], [sum_x2, sum_x3, sum_x4, sum_x5, sum_x2y], [sum_x3, sum_x4, sum_x5, sum_x6, sum_x3y]]
+    for i in range(n_build):
+        p_xy_sum = p_xy_sum + ((x_build[i] - x_ser_build)*(y_build[i] - y_ser_build))
+        p_x_sum = p_x_sum + ((x_build[i] - x_ser_build)*(x_build[i] - x_ser_build))
+        p_y_sum = p_y_sum + ((y_build[i] - y_ser_build)*(y_build[i] - y_ser_build))
+    arr = [[n_build, sum_x_build, sum_x2_build, sum_x3_build, sum_y_build], [sum_x_build, sum_x2_build, sum_x3_build, sum_x4_build, sum_xy_build], [sum_x2_build, sum_x3_build, sum_x4_build, sum_x5_build, sum_x2y_build], [sum_x3_build, sum_x4_build, sum_x5_build, sum_x6_build, sum_x3y_build]]
     koefs = kramer(arr, 4)
     print(" => polinomial (n=3):")
     print("  a1 = " + str(koefs[0]))
@@ -188,42 +257,69 @@ def polinomial_model_3(x_arr, y_arr, n, plot):
     print("  koef kor = " + str(koef_kor))
     r2_yt = 0
     r2_y = 0
-    for i in range(n):
-        yti = koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i] + koefs[3]*(math.pow(x_arr[i], 3))
-        r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
-        r2_y = r2_y + ((y[i]-y_ser)*(y[i]-y_ser))
+    for i in range(n_build):
+        yti = koefs[0] + x_build[i] * koefs[1] + koefs[2] * math.pow(x_build[i], 2) + koefs[3] * math.pow(x_build[i], 3)
+        r2_yt = r2_yt + math.pow(y_build[i] - yti, 2)
+        r2_y = r2_y + math.pow(y_build[i] - y_ser_build, 2)
         yt.append(yti)
     r2 = 1 - (r2_yt/r2_y)
-    print("  r^2 = " + str(r2) + "\n")
-    x_arr = sorted(x_arr)
-    for i in range(n):
-        yt3.append(koefs[0] + x_arr[i]*koefs[1] + koefs[2]*x_arr[i]*x_arr[i] + koefs[3]*(math.pow(x_arr[i], 3)))
-    plot.plot(x_arr, yt3, label = "polinomial (n=3)", color="yellow")
+    print("  r^2 = " + str(r2))
+    r2_yt_test = 0
+    r2_y_test = 0
+    sum_y_test = 0
+    for i in range(n_test):
+        sum_y_test = sum_y_test + y_test[i]
+    y_ser_test = sum_y_test / n_test
+    for i in range(n_test):
+        yti = koefs[0] + x_test[i] * koefs[1] + koefs[2] * math.pow(x_test[i], 2) + koefs[3] * math.pow(x_test[i], 3)
+        r2_yt_test = r2_yt_test + math.pow(y_test[i] - yti, 2)
+        r2_y_test = r2_y_test + math.pow(y_test[i] - y_ser_test, 2)
+    r2_test = 1 - (r2_yt_test/r2_y_test)
+    print("  r^2 (test) = " + str(r2_test) + "\n")
+    x_build = sorted(x_build)
+    for i in range(n_build):
+        yt3.append(koefs[0] + x_build[i] * koefs[1] + koefs[2] * math.pow(x_build[i], 2) + koefs[3] * math.pow(x_build[i], 3))
+    plot.plot(x_build, yt3, label = "polinomial (n=3)", color="yellow")
 
 def log_model(x_arr, y_arr, n, plot):
+    x_build = []
+    y_build = []
+    x_test = []
+    y_test = []
+    n_build = 0
+    n_test = 0
+    for i in range(n):
+        if i % 5 == 0:
+            x_test.append(x_arr[i])
+            y_test.append(y_arr[i])
+            n_test = n_test + 1
+        else:
+            x_build.append(x_arr[i])
+            y_build.append(y_arr[i])
+            n_build = n_build + 1
     yt = []
     ytl = []
-    sum_x = 0.0
-    sum_y = 0.0
-    sum_ln_x = 0.0
-    sum_ln2_x = 0.0
-    sum_yln_x = 0.0
-    for i in range(n):
-        sum_x = sum_x + x_arr[i]
-        sum_y = sum_y + y_arr[i]
-        sum_ln_x = sum_ln_x + math.log(x_arr[i])
-        sum_ln2_x = sum_ln2_x + math.pow(math.log(x_arr[i]), 2)
-        sum_yln_x = sum_yln_x + (y_arr[i]*math.log(x_arr[i]))
-    x_ser = sum_x/n
-    y_ser = sum_y/n
+    sum_x_build = 0.0
+    sum_y_build = 0.0
+    sum_ln_x_build = 0.0
+    sum_ln2_x_build = 0.0
+    sum_yln_x_build = 0.0
+    for i in range(n_build):
+        sum_x_build = sum_x_build + x_build[i]
+        sum_y_build = sum_y_build + y_build[i]
+        sum_ln_x_build = sum_ln_x_build + math.log(x_build[i])
+        sum_ln2_x_build = sum_ln2_x_build + math.pow(math.log(x_build[i]), 2)
+        sum_yln_x_build = sum_yln_x_build + (y_build[i]*math.log(x_build[i]))
+    x_ser_build = sum_x_build/n_build
+    y_ser_build = sum_y_build/n_build
     p_xy_sum = 0.0
     p_x_sum = 0.0
     p_y_sum = 0.0
-    for i in range(n):
-        p_xy_sum = p_xy_sum + ((x_arr[i] - x_ser)*(y_arr[i] - y_ser))
-        p_x_sum = p_x_sum + ((x_arr[i] - x_ser)*(x_arr[i] - x_ser))
-        p_y_sum = p_y_sum + ((y_arr[i] - y_ser)*(y_arr[i] - y_ser))
-    arr = [[n, sum_ln_x, sum_y], [sum_ln_x, sum_ln2_x, sum_yln_x]]
+    for i in range(n_build):
+        p_xy_sum = p_xy_sum + ((x_build[i] - x_ser_build)*(y_build[i] - y_ser_build))
+        p_x_sum = p_x_sum + ((x_build[i] - x_ser_build)*(x_build[i] - x_ser_build))
+        p_y_sum = p_y_sum + ((y_build[i] - y_ser_build)*(y_build[i] - y_ser_build))
+    arr = [[n_build, sum_ln_x_build, sum_y_build], [sum_ln_x_build, sum_ln2_x_build, sum_yln_x_build]]
     koefs = kramer(arr, 2)
     print(" => log:")
     print("  a1 = " + str(koefs[0]))
@@ -232,43 +328,69 @@ def log_model(x_arr, y_arr, n, plot):
     print("  koef kor = " + str(koef_kor))
     r2_yt = 0
     r2_y = 0
-    
-    for i in range(n):
-        yti = koefs[0] + math.log(x_arr[i])*koefs[1]
-        r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
-        r2_y = r2_y + ((y[i]-y_ser)*(y[i]-y_ser))
+    for i in range(n_build):
+        yti = koefs[0] + math.log(x_build[i]) * koefs[1]
+        r2_yt = r2_yt + math.pow(y_build[i] - yti, 2)
+        r2_y = r2_y + math.pow(y_build[i] - y_ser_build, 2)
         yt.append(yti)
     r2 = 1 - (r2_yt/r2_y)
-    print("  r^2 = " + str(r2) + "\n")
-    x_arr = sorted(x_arr)
-    for i in range(n):
-        ytl.append(koefs[0] + math.log(x_arr[i])*koefs[1])
-    plot.plot(x_arr, ytl, label = "log", color="brown")
+    print("  r^2 = " + str(r2))
+    r2_yt_test = 0
+    r2_y_test = 0
+    sum_y_test = 0
+    for i in range(n_test):
+        sum_y_test = sum_y_test + y_test[i]
+    y_ser_test = sum_y_test / n_test
+    for i in range(n_test):
+        yti = koefs[0] + math.log(x_test[i]) * koefs[1]
+        r2_yt_test = r2_yt_test + math.pow(y_test[i] - yti, 2)
+        r2_y_test = r2_y_test + math.pow(y_test[i] - y_ser_test, 2)
+    r2_test = 1 - (r2_yt_test/r2_y_test)
+    print("  r^2 (test) = " + str(r2_test) + "\n")
+    x_build = sorted(x_build)
+    for i in range(n_build):
+        ytl.append(koefs[0] + math.log(x_build[i]) * koefs[1])
+    plot.plot(x_build, ytl, label = "log", color="brown")
 
 def exp_model(x_arr, y_arr, n, plot):
+    x_build = []
+    y_build = []
+    x_test = []
+    y_test = []
+    n_build = 0
+    n_test = 0
+    for i in range(n):
+        if i % 5 == 0:
+            x_test.append(x_arr[i])
+            y_test.append(y_arr[i])
+            n_test = n_test + 1
+        else:
+            x_build.append(x_arr[i])
+            y_build.append(y_arr[i])
+            n_build = n_build + 1
     yt = []
     yte = []
-    sum_x = 0.0
-    sum_y = 0.0
-    sum_e_x = 0.0
-    sum_e_2x = 0.0
-    sum_ye_x = 0.0
-    for i in range(n):
-        sum_x = sum_x + x_arr[i]
-        sum_y = sum_y + y_arr[i]
-        sum_e_x = sum_e_x + math.exp(x_arr[i])
-        sum_e_2x = sum_e_2x + math.exp(x_arr[i]*2)
-        sum_ye_x = sum_ye_x + (y_arr[i]*math.exp(x_arr[i]))
-    x_ser = sum_x/n
-    y_ser = sum_y/n
+    sum_x_build = 0.0
+    sum_y_build = 0.0
+    sum_e_x_build = 0.0
+    sum_e_2x_build = 0.0
+    sum_ye_x_build = 0.0
+    for i in range(n_build):
+        sum_x_build = sum_x_build + x_build[i]
+        sum_y_build = sum_y_build + y_build[i]
+        sum_e_x_build = sum_e_x_build + math.exp(x_build[i])
+        sum_e_2x_build = sum_e_2x_build + math.exp(x_build[i] * 2)
+        sum_ye_x_build = sum_ye_x_build + (y_build[i] * math.exp(x_build[i]))
+    x_ser_build = sum_x_build/n_build
+    y_ser_build = sum_y_build/n_build
     p_xy_sum = 0.0
     p_x_sum = 0.0
     p_y_sum = 0.0
-    for i in range(n):
-        p_xy_sum = p_xy_sum + ((x_arr[i] - x_ser)*(y_arr[i] - y_ser))
-        p_x_sum = p_x_sum + ((x_arr[i] - x_ser)*(x_arr[i] - x_ser))
-        p_y_sum = p_y_sum + ((y_arr[i] - y_ser)*(y_arr[i] - y_ser))
-    arr = [[n, sum_e_x, sum_y], [sum_e_x, sum_e_2x, sum_ye_x]]
+    for i in range(n_build):
+        p_xy_sum = p_xy_sum + ((x_build[i] - x_ser_build)*(y_build[i] - y_ser_build))
+        p_x_sum = p_x_sum + ((x_build[i] - x_ser_build)*(x_build[i] - x_ser_build))
+        p_y_sum = p_y_sum + ((y_build[i] - y_ser_build)*(y_build[i] - y_ser_build))
+    arr = [[n_build, sum_e_x_build, sum_y_build], [sum_e_x_build, sum_e_2x_build, sum_ye_x_build]]
     koefs = kramer(arr, 2)
     print(" => exp:")
     print("  a1 = " + str(koefs[0]))
@@ -277,18 +399,29 @@ def exp_model(x_arr, y_arr, n, plot):
     print("  koef kor = " + str(koef_kor))
     r2_yt = 0
     r2_y = 0
-    
-    for i in range(n):
-        yti = koefs[0] + math.exp(x_arr[i])*koefs[1]
-        r2_yt = r2_yt + ((y[i]-yti)*(y[i]-yti))
-        r2_y = r2_y + ((y[i]-y_ser)*(y[i]-y_ser))
+    for i in range(n_build):
+        yti = koefs[0] + math.exp(x_build[i]) * koefs[1]
+        r2_yt = r2_yt + math.pow(y_build[i] - yti, 2)
+        r2_y = r2_y + math.pow(y_build[i] - y_ser_build, 2)
         yt.append(yti)
     r2 = 1 - (r2_yt/r2_y)
-    print("  r^2 = " + str(r2) + "\n")
-    x_arr = sorted(x_arr)
-    for i in range(n):
-        yte.append(koefs[0] + math.exp(x_arr[i])*koefs[1])
-    plot.plot(x_arr, yte, label = "exp", color="lime")
+    print("  r^2 = " + str(r2))
+    r2_yt_test = 0
+    r2_y_test = 0
+    sum_y_test = 0
+    for i in range(n_test):
+        sum_y_test = sum_y_test + y_test[i]
+    y_ser_test = sum_y_test / n_test
+    for i in range(n_test):
+        yti = koefs[0] + math.exp(x_test[i]) * koefs[1]
+        r2_yt_test = r2_yt_test + math.pow(y_test[i] - yti, 2)
+        r2_y_test = r2_y_test + math.pow(y_test[i] - y_ser_test, 2)
+    r2_test = 1 - (r2_yt_test/r2_y_test)
+    print("  r^2 (test) = " + str(r2_test) + "\n")
+    x_build = sorted(x_build)
+    for i in range(n_build):
+        yte.append(koefs[0] + math.exp(x_build[i]) * koefs[1])
+    plot.plot(x_build, yte, label = "exp", color="lime")
 
 if __name__ == "__main__":
     x = []
@@ -311,7 +444,10 @@ if __name__ == "__main__":
         linear_model(x, y, num_rows, plt)
         polinomial_model_2(x, y, num_rows, plt)
         polinomial_model_3(x, y, num_rows, plt)
-        log_model(x, y, num_rows, plt)
+        try:
+            log_model(x, y, num_rows, plt)
+        except:
+            pass
         exp_model(x, y, num_rows, plt)
         plt.xlabel(xl)
         plt.ylabel(yl)
